@@ -36,3 +36,62 @@
 .no-close .ui-dialog-titlebar-close {
     display: none;
 }
+
+#add_remove_cancel {
+    padding: 20px;
+    margin: 20px;
+    border-radius: 5px;
+}
+#add_remove_cancel p {
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+#add_remove_cancel ul {
+    list-style-type: none;
+    padding: 0;
+}
+#add_remove_cancel li {
+    margin-bottom: 5px;
+}
+#add_remove_cancel .convert-text {
+    font-weight: bold;
+    color: #4CAF50;
+}
+#add_remove_cancel strong {
+    font-weight: bold;
+    color: #FF0000;
+}
+
+
+#adv-inheritance-add-button {
+    background-color: #4CAF50; /* Green */
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    cursor: pointer;
+    border-radius: 4px;
+}
+
+#adv-inheritance-cancel-button, #adv-inheritance-remove-button {
+    background-color: #f44336; /* Red */
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    cursor: pointer;
+    border-radius: 4px;
+}
+
+#adv-inheritance-cancel-button {
+    background-color: #e7e7e7; /* Gray */
+    color: black;
+}

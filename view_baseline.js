@@ -41,6 +41,7 @@ obj_name_div = $(
 advanced_expl_div = $(
   '<div id="permdialog_advanced_explantion_text">For special permissions or advanced settings, click Advanced.</div>'
 );
+// let new_effective_permission_panel = define_new_effective_permissions("effective_permission_panel", true, null);
 
 // Make the (grouped) permission checkboxes table:
 grouped_permissions = define_grouped_permission_checkboxes(
@@ -187,6 +188,7 @@ perm_dialog.append(perm_add_user_select);
 perm_add_user_select.append(perm_remove_user_button); // Cheating a bit again - add the remove button the the 'add user select' div, just so it shows up on the same line.
 perm_dialog.append(grouped_permissions);
 perm_dialog.append(advanced_expl_div);
+// perm_dialog.append(new_effective_permission_panel);
 
 // --- Additional logic for reloading contents when needed: ---
 //Define an observer which will propagate perm_dialog's filepath attribute to all the relevant elements, whenever it changes:
@@ -221,8 +223,7 @@ function make_all_users_list(id_prefix, attr_set_id, height = 80) {
     let user = all_users[username];
     all_user_list.append(
       `<div class="ui-widget-content" id="${id_prefix}_${username}" username="${username}">
-                <span id="${id_prefix}_${username}_icon" class="oi ${
-        is_user(user) ? "oi-person" : "oi-people"
+                <span id="${id_prefix}_${username}_icon" class="oi ${is_user(user) ? "oi-person" : "oi-people"
       }"/> 
                 ${username}
             </div>`
@@ -297,25 +298,19 @@ function open_advanced_dialog(file_path) {
     let grouped_perms = get_grouped_permissions(file_obj, u);
     for (let ace_type in grouped_perms) {
       for (let perm in grouped_perms[ace_type]) {
-        $("#adv_perm_table").append(`<tr id="adv_perm_${
-          file_obj.filename
-        }__${u}_${ace_type}_${perm}">
-                    <td id="adv_perm_${
-                      file_obj.filename
-                    }__${u}_${ace_type}_${perm}_type">${ace_type}</td>
-                    <td id="adv_perm_${
-                      file_obj.filename
-                    }__${u}_${ace_type}_${perm}_name">${u}</td>
-                    <td id="adv_perm_${
-                      file_obj.filename
-                    }__${u}_${ace_type}_${perm}_permission">${perm}</td>
-                    <td id="adv_perm_${
-                      file_obj.filename
-                    }__${u}_${ace_type}_${perm}_type">${
-          grouped_perms[ace_type][perm].inherited
+        $("#adv_perm_table").append(`<tr id="adv_perm_${file_obj.filename
+          }__${u}_${ace_type}_${perm}">
+                    <td id="adv_perm_${file_obj.filename
+          }__${u}_${ace_type}_${perm}_type">${ace_type}</td>
+                    <td id="adv_perm_${file_obj.filename
+          }__${u}_${ace_type}_${perm}_name">${u}</td>
+                    <td id="adv_perm_${file_obj.filename
+          }__${u}_${ace_type}_${perm}_permission">${perm}</td>
+                    <td id="adv_perm_${file_obj.filename
+          }__${u}_${ace_type}_${perm}_type">${grouped_perms[ace_type][perm].inherited
             ? "Parent Object"
             : "(not inherited)"
-        }</td>
+          }</td>
                 </tr>`);
       }
     }
@@ -433,11 +428,13 @@ $("#adv_perm_inheritance").change(function () {
   } else {
     // has just been turned off - pop up dialog with add/remove/cancel
     $(`<div id="add_remove_cancel" title="Security">
-            Warning: if you proceed, inheritable permissions will no longer propagate to this object.<br/>
-            - Click Add to convert and add inherited parent permissions as explicit permissions on this object<br/>
-            - Click Remove to remove inherited parent permissions from this object<br/>
-            - Click Cancel if you do not want to modify inheritance settings at this time.<br/>
-        </div>`).dialog({
+    <p>Warning: if you proceed, inheritable permissions will no longer propagate to this file.</p>
+    <ul>
+        <li>Click <strong class="convert-text">Convert</strong> to convert and unlock all permissions from inherited parent permissions</li>
+        <li>Click <strong>Remove</strong> to remove all inherited parent permissions</li>
+    </ul>
+</div>
+`).dialog({
       // TODO: don't create this dialog on the fly
       modal: true,
       width: 400,
@@ -445,7 +442,7 @@ $("#adv_perm_inheritance").change(function () {
       position: { my: "top", at: "top", of: $("#html-loc") },
       buttons: {
         Add: {
-          text: "Add",
+          text: "Convert",
           id: "adv-inheritance-add-button",
           click: function () {
             let filepath = $("#advdialog").attr("filepath");
