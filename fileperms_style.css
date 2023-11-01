@@ -36,3 +36,17 @@
 .no-close .ui-dialog-titlebar-close {
     display: none;
 }
+
+#perm_add_user_line {
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+#perm_add_user_button {
+    color: white;
+    background: rgb(57, 211, 100);
+}
+#perm_remove_user {
+    color: white;
+    background: rgb(218, 52, 52);
+}
