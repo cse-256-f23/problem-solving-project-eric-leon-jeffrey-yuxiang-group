@@ -1,5 +1,22 @@
 // ---- Define your dialogs  and panels here ----
-
+let new_effective_permission_panel = define_new_effective_permissions("effective_permission_panel", true, null);
+let user_select_field = define_new_user_select_field("effective_permission_panel", "user selection", function(selected_user){
+    $('#effective_permission_panel').attr('username', selected_user)
+    $('#effective_permission_panel').attr('filepath', '/C/presentation_documents/important_file.txt')
+});
+let permission_dialog = define_new_dialog("perm_dialog", title='Permissions', options = {});
+$('#sidepanel').append(user_select_field)
+$('#sidepanel').append(new_effective_permission_panel)
+$('.perm_info').click(function(){
+    console.log('clicked!');
+    permission_dialog.dialog("open");
+    permission_dialog.empty();
+    permission_dialog.append(get_explanation_text(allow_user_action(
+    path_to_file[$('#effective_permission_panel').attr('filepath')], 
+    all_users[$('#effective_permission_panel').attr('username')],
+    $(this).attr('permission_name'),
+    (explain_why = true))));
+})
 
 
 // ---- Display file structure ----
