@@ -144,3 +144,6 @@
     margin-top: 10px;
     margin-bottom: 10px;
 }
+#advtab_title_effective {
+   display: none;
+}
