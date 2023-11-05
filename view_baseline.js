@@ -11,7 +11,7 @@ perm_dialog = define_new_dialog(
   (options = {
     // The following are standard jquery-ui options. See https://jqueryui.com/dialog/
     height: 500,
-    width: 400,
+    width: 'auto',
     buttons: {
       OK: {
         text: "OK",
@@ -53,8 +53,12 @@ grouped_permissions.addClass("section"); // add a 'section' class to the grouped
 file_permission_users = define_single_select_list(
   "permdialog_file_user_list",
   function (selected_user, e, ui) {
+    // Update the selected user
+    selectedUsername = selected_user; // Update the local variable
+    $('#permdialog_effective_permission_panel').attr('username', selectedUsername)
+    console.log("selected user: " + selected_user);
     // when a new user is selected, change username attribute of grouped permissions:
-    grouped_permissions.attr("username", selected_user);
+    grouped_permissions.attr("username", selectedUsername);
   }
 );
 file_permission_users.css({
@@ -178,21 +182,57 @@ perm_remove_user_button.click(function () {
   }
 });
 
+let selectedUsername = '';
+let currentFilePath = '';
+
+let permdialog_effective_permission_panel = define_new_effective_permissions("permdialog_effective_permission_panel", true, null);
 // --- Append all the elements to the permissions dialog in the right order: ---
-perm_dialog.append(obj_name_div);
-perm_dialog.append(
-  $('<div id="permissions_user_title">Group or user names:</div>')
-);
-perm_dialog.append(file_permission_users);
-perm_dialog.append(perm_add_user_select);
-perm_add_user_select.append(perm_remove_user_button); // Cheating a bit again - add the remove button the the 'add user select' div, just so it shows up on the same line.
-perm_dialog.append(grouped_permissions);
-perm_dialog.append(advanced_expl_div);
-// perm_dialog.append(new_effective_permission_panel);
+// Create a flex container div:
+let flexContainer = $('<div/>', { id: 'perm_flex_container', style: 'display: flex; width: 100%;' });
+
+// Create left column wrapper:
+let leftColumn = $('<div/>', { id: 'perm_left_column', style: 'flex: 1; padding-right: 10px;' });
+let rightColumn = $('<div/>', { id: 'perm_right_column', style: 'flex: 1; padding-right: 10px;' });
+let permissionsTitle = $('<h3/>',{id: 'permdialog_effective_panel_title'}).text("User's Effective Permissions");
+rightColumn.append(permissionsTitle);
+
+// Append all the elements to the left column:
+leftColumn.append(obj_name_div);
+leftColumn.append($('<div id="permissions_user_title">Group or user names:</div>'));
+leftColumn.append(file_permission_users);
+leftColumn.append(perm_add_user_select);
+perm_add_user_select.append(perm_remove_user_button);
+leftColumn.append(grouped_permissions);
+leftColumn.append(advanced_expl_div);
+
+// Append the left column and the effective permissions panel (right column) to the flex container:
+flexContainer.append(leftColumn);
+flexContainer.append(rightColumn);
+
+perm_dialog.on("dialogclose", function (event, ui) {
+  // Clear the username and filepath attributes
+  $('#permdialog_effective_permission_panel').attr('username', '');
+  $('#permdialog_effective_permission_panel').attr('filepath', '');
+  selectedUsername = undefined;
+  currentFilePath = undefined;
+  $('#permdialog_effective_permission_panel').remove();
+});
+perm_dialog.on("dialogopen", function (event, ui) {
+  permdialog_effective_permission_panel = define_new_effective_permissions("permdialog_effective_permission_panel", true, null);
+  rightColumn.append(permdialog_effective_permission_panel);
+});
+
+// Finally, append the flex container to the perm_dialog:
+perm_dialog.empty(); // Clear the perm_dialog before appending new structure
+perm_dialog.append(flexContainer);
 
 // --- Additional logic for reloading contents when needed: ---
 //Define an observer which will propagate perm_dialog's filepath attribute to all the relevant elements, whenever it changes:
 define_attribute_observer(perm_dialog, "filepath", function () {
+  currentFilePath = perm_dialog.attr("filepath");
+  console.log("current file path: " + currentFilePath);
+  $('#permdialog_effective_permission_panel').attr('filepath', currentFilePath)
+
   let current_filepath = perm_dialog.attr("filepath");
 
   grouped_permissions.attr("filepath", current_filepath); // set filepath for permission checkboxes

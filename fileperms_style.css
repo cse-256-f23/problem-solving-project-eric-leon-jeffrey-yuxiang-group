@@ -7,9 +7,9 @@
     margin-bottom: 5px;
 }
 
-.ui-selected { 
-    background: #007fff; 
-    color: white; 
+.ui-selected {
+    background: #007fff;
+    color: white;
 }
 
 .footer {
@@ -23,7 +23,7 @@
     position: absolute;
     width: 99%;
     bottom: 0px;
-    top:unset;
+    top: unset;
     left: 0;
     background-color: #eee;
     z-index: 100;
@@ -42,21 +42,26 @@
     margin: 20px;
     border-radius: 5px;
 }
+
 #add_remove_cancel p {
     font-weight: bold;
     margin-bottom: 10px;
 }
+
 #add_remove_cancel ul {
     list-style-type: none;
     padding: 0;
 }
+
 #add_remove_cancel li {
     margin-bottom: 5px;
 }
+
 #add_remove_cancel .convert-text {
     font-weight: bold;
     color: #4CAF50;
 }
+
 #add_remove_cancel strong {
     font-weight: bold;
     color: #FF0000;
@@ -64,7 +69,8 @@
 
 
 #adv-inheritance-add-button {
-    background-color: #4CAF50; /* Green */
+    background-color: #4CAF50;
+    /* Green */
     color: white;
     border: none;
     padding: 10px 20px;
@@ -77,8 +83,10 @@
     border-radius: 4px;
 }
 
-#adv-inheritance-cancel-button, #adv-inheritance-remove-button {
-    background-color: #f44336; /* Red */
+#adv-inheritance-cancel-button,
+#adv-inheritance-remove-button {
+    background-color: #f44336;
+    /* Red */
     color: white;
     border: none;
     padding: 10px 20px;
@@ -92,9 +100,11 @@
 }
 
 #adv-inheritance-cancel-button {
-    background-color: #e7e7e7; /* Gray */
+    background-color: #e7e7e7;
+    /* Gray */
     color: black;
 }
+
 #perm_add_user_line {
     margin-top: 20px;
     margin-bottom: 20px;
@@ -104,7 +114,33 @@
     color: white;
     background: rgb(57, 211, 100);
 }
+
 #perm_remove_user {
     color: white;
     background: rgb(218, 52, 52);
+}
+
+#perm_right_column {
+    margin-left: 20px;
+    row-gap: 10px;
+}
+
+#permdialog_effective_permission_panel table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0 5px;
+}
+#permdialog_effective_permission_panel td {
+    padding: 0 5px;
+}
+#permdialog_effective_permission_panel .effectivecheckcell {
+    position: relative;
+    padding-left: 10px;
+}
+
+#permdialog_effective_panel_title {
+    font-size: 18px;
+    font-weight: bold;
+    margin-top: 10px;
+    margin-bottom: 10px;
 }
