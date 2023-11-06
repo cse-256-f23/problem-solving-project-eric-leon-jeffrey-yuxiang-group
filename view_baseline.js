@@ -10,7 +10,7 @@ perm_dialog = define_new_dialog(
   (title = "Permissions"),
   (options = {
     // The following are standard jquery-ui options. See https://jqueryui.com/dialog/
-    height: 560,
+    height: 650,
     width: "auto",
     buttons: {
       OK: {
@@ -39,7 +39,7 @@ obj_name_div = $(
 
 // Make the div with the explanation about special permissions/advanced settings:
 advanced_expl_div = $(
-  '<div id="permdialog_advanced_explantion_text"><br>For special permissions or advanced settings, click <strong>Advanced</strong>.</div>'
+  '<div id="permdialog_advanced_explantion_text"><br>For special permissions or detailed settings, click <strong>Advanced</strong>.</div>'
 );
 // let new_effective_permission_panel = define_new_effective_permissions("effective_permission_panel", true, null);
 
@@ -64,17 +64,16 @@ file_permission_users = define_single_select_list(
   function (selected_user, e, ui) {
     // Update the selected user
     selectedUsername = selected_user; // Update the local variable
-    $("#permdialog_effective_permission_panel").attr(
-      "username",
-      selectedUsername
-    );
+    $("#permdialog_effective_permission_panel").attr("username",selectedUsername);
     console.log("selected user: " + selected_user);
     // when a new user is selected, change username attribute of grouped permissions:
     grouped_permissions.attr("username", selectedUsername);
   }
 );
 file_permission_users.css({
-  height: "80px",
+  height: "100px",
+  marginTop: "5px",
+  marginBottom: "5px",
 });
 
 // Make button to add a new user to the list:
@@ -197,16 +196,19 @@ perm_remove_user_button.click(function () {
 let selectedUsername = "";
 let currentFilePath = "";
 
-let permdialog_effective_permission_panel = define_new_effective_permissions(
-  "permdialog_effective_permission_panel",
-  true,
-  null
-);
+let permdialog_effective_permission_panel;
 // --- Append all the elements to the permissions dialog in the right order: ---
 // Create a flex container div:
 let flexContainer = $("<div/>", {
   id: "perm_flex_container",
   style: "display: flex; width: 100%; height:70px;",
+});
+let advancedDialogButton = $('<button/>', {
+  id: "open-advanced-dialog-button",
+  text: "Advanced Permission Settings",
+  class: "ui-button ui-widget ui-corner-all"
+}).click(function() {
+  open_advanced_dialog(perm_dialog.attr("filepath"));
 });
 
 // Create left column wrapper:
@@ -235,14 +237,19 @@ leftColumn.append(
     '<div id="permissions_user_tips">Click on a <strong>name</strong> to see their permissions.</div>'
   )
 );
+leftColumn.append($(
+  '<div id="permissions_user_tips">Use the <strong>Add User</strong> to add a user if they are not in this list.</div>'
+));
 leftColumn.append(perm_add_user_select);
 perm_add_user_select.append(perm_remove_user_button);
 leftColumn.append(grouped_permissions);
+leftColumn.append(advancedDialogButton);
 leftColumn.append(advanced_expl_div);
 
 // Append the left column and the effective permissions panel (right column) to the flex container:
 flexContainer.append(leftColumn);
 flexContainer.append(rightColumn);
+
 
 perm_dialog.on("dialogclose", function (event, ui) {
   // Clear the username and filepath attributes
@@ -345,9 +352,7 @@ function open_permission_entry(file_path) {
   let file_obj = path_to_file[file_path];
 
   $("#perm_entry_username").text("");
-
   $(".perm_entry_checkcell").empty();
-
   $(`#permentry`).dialog("open");
 }
 
@@ -671,12 +676,12 @@ let user_select_contents = $("#user_select_dialog").dialog({
 });
 
 let perm_entry_dialog = $("#permentry").dialog({
-  modal: true,
+  modal: false,
   autoOpen: false,
   height: 500,
   width: 400,
-  appendTo: "#html-loc",
-  position: { my: "top", at: "top", of: $("#html-loc") },
+  appendTo: "#adv_permissions_tab",
+  position: { my: "top", at: "top", of: $("#adv_permissions_tab") },
   buttons: {
     OK: {
       text: "OK",
@@ -702,6 +707,7 @@ for (let p of Object.values(permissions)) {
   $("#perm_entry_table").append(row);
 }
 
+$("#adv_perm_edit").text("Edit Settings");
 $("#adv_perm_edit").click(function () {
   let filepath = $("#advdialog").attr("filepath");
   open_permission_entry(filepath);

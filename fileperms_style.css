@@ -104,7 +104,7 @@
 }
 
 #perm_add_user_line {
-  margin-top: 20px;
+  margin-top: 10px;
   margin-bottom: 20px;
 }
 
@@ -148,4 +148,11 @@
 
 #permdialog_update_permission_explantion_text {
   max-width: 400px;
+}
+#adv_perm_edit {
+  margin-bottom: 20px;
+}
+.highlight {
+  color: red;
+  font-weight: bold;
 }
