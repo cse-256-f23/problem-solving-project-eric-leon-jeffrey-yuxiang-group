@@ -11,7 +11,7 @@ perm_dialog = define_new_dialog(
   (options = {
     // The following are standard jquery-ui options. See https://jqueryui.com/dialog/
     height: 650,
-    width: "auto",
+    width: 900,
     buttons: {
       OK: {
         text: "OK",
