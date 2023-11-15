@@ -243,6 +243,9 @@ leftColumn.append($(
 leftColumn.append(perm_add_user_select);
 perm_add_user_select.append(perm_remove_user_button);
 leftColumn.append(grouped_permissions);
+leftColumn.append($('<p/>', {
+  html: '<p class="inheritable-hint">If a checkbox is unclickable, go to <strong>Advanced</strong>, uncheck <strong>Inhertiable Permission</strong>, and choose <strong style="color: #4caf50;">Convert</strong></p>',
+}));
 leftColumn.append(advancedDialogButton);
 leftColumn.append(advanced_expl_div);
 

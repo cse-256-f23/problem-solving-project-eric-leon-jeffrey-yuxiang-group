@@ -156,3 +156,6 @@
   color: red;
   font-weight: bold;
 }
+.inheritable-hint{
+  margin: 15px 0;
+}
