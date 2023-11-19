@@ -46,16 +46,39 @@ advanced_expl_div = $(
 // Make the div with the explanation about special permissions/advanced settings:
 update_expl_div = $(
   '<div id="permdialog_update_permission_explantion_text">' +
-    "Note that when you change permissions through the checkboxes, " +
-    "the effect does not immediately show in this panel.<br><br>" +
-    "If you want to see what changed after your edit, click <strong>OK</strong> " +
-    "and reopen <strong>Edit Permissions</strong>.</div><br>"
+  "Note that when you change permissions through the checkboxes, " +
+  "the effect does not immediately show in this panel.<br><br>" +
+  "If you want to see what changed after your edit, click <strong>OK</strong> " +
+  "and reopen <strong>Edit Permissions</strong>.</div><br>"
 );
 
 // Make the (grouped) permission checkboxes table:
 grouped_permissions = define_grouped_permission_checkboxes(
   "permdialog_grouped_permissions"
 );
+
+let clickTracker = false;
+grouped_permissions.on("click", function () {
+  clickTracker = true;
+  console.log("clicked on permission checkbox");
+  console.log("click tracker: " + clickTracker);
+  $("#permdialog_effective_permission_panel").attr("filepath", currentFilePath);
+  $("#permdialog_effective_permission_panel").attr("username", selectedUsername);
+
+  // Start an interval that runs every 100 ms
+  let intervalId = setInterval(function() {
+    console.log("click tracker: " + clickTracker);
+    $("#permdialog_effective_permission_panel").attr("filepath", currentFilePath);
+    $("#permdialog_effective_permission_panel").attr("username", selectedUsername);
+  }, 100);
+
+  // Stop the interval after 1 second (1000 ms)
+  setTimeout(function() {
+    clearInterval(intervalId);
+    clickTracker = false; 
+  }, 1000);
+});
+
 grouped_permissions.addClass("section"); // add a 'section' class to the grouped_permissions element. This class adds a bit of spacing between this element and the next.
 
 // Make the list of users (empty for now - will get populated when we know the file):
@@ -64,7 +87,7 @@ file_permission_users = define_single_select_list(
   function (selected_user, e, ui) {
     // Update the selected user
     selectedUsername = selected_user; // Update the local variable
-    $("#permdialog_effective_permission_panel").attr("username",selectedUsername);
+    $("#permdialog_effective_permission_panel").attr("username", selectedUsername);
     console.log("selected user: " + selected_user);
     // when a new user is selected, change username attribute of grouped permissions:
     grouped_permissions.attr("username", selectedUsername);
@@ -207,7 +230,7 @@ let advancedDialogButton = $('<button/>', {
   id: "open-advanced-dialog-button",
   text: "Advanced Permission Settings",
   class: "ui-button ui-widget ui-corner-all"
-}).click(function() {
+}).click(function () {
   open_advanced_dialog(perm_dialog.attr("filepath"));
 });
 
@@ -258,8 +281,8 @@ perm_dialog.on("dialogclose", function (event, ui) {
   // Clear the username and filepath attributes
   $("#permdialog_effective_permission_panel").attr("username", "");
   $("#permdialog_effective_permission_panel").attr("filepath", "");
-  selectedUsername = undefined;
-  currentFilePath = undefined;
+  selectedUsername = "";
+  currentFilePath = "";
   $("#permdialog_effective_permission_panel").remove();
 });
 perm_dialog.on("dialogopen", function (event, ui) {
@@ -312,8 +335,7 @@ function make_all_users_list(id_prefix, attr_set_id, height = 80) {
     let user = all_users[username];
     all_user_list.append(
       `<div class="ui-widget-content" id="${id_prefix}_${username}" username="${username}">
-                <span id="${id_prefix}_${username}_icon" class="oi ${
-        is_user(user) ? "oi-person" : "oi-people"
+                <span id="${id_prefix}_${username}_icon" class="oi ${is_user(user) ? "oi-person" : "oi-people"
       }"/> 
                 ${username}
             </div>`
@@ -386,25 +408,19 @@ function open_advanced_dialog(file_path) {
     let grouped_perms = get_grouped_permissions(file_obj, u);
     for (let ace_type in grouped_perms) {
       for (let perm in grouped_perms[ace_type]) {
-        $("#adv_perm_table").append(`<tr id="adv_perm_${
-          file_obj.filename
-        }__${u}_${ace_type}_${perm}">
-                    <td id="adv_perm_${
-                      file_obj.filename
-                    }__${u}_${ace_type}_${perm}_type">${ace_type}</td>
-                    <td id="adv_perm_${
-                      file_obj.filename
-                    }__${u}_${ace_type}_${perm}_name">${u}</td>
-                    <td id="adv_perm_${
-                      file_obj.filename
-                    }__${u}_${ace_type}_${perm}_permission">${perm}</td>
-                    <td id="adv_perm_${
-                      file_obj.filename
-                    }__${u}_${ace_type}_${perm}_type">${
-          grouped_perms[ace_type][perm].inherited
+        $("#adv_perm_table").append(`<tr id="adv_perm_${file_obj.filename
+          }__${u}_${ace_type}_${perm}">
+                    <td id="adv_perm_${file_obj.filename
+          }__${u}_${ace_type}_${perm}_type">${ace_type}</td>
+                    <td id="adv_perm_${file_obj.filename
+          }__${u}_${ace_type}_${perm}_name">${u}</td>
+                    <td id="adv_perm_${file_obj.filename
+          }__${u}_${ace_type}_${perm}_permission">${perm}</td>
+                    <td id="adv_perm_${file_obj.filename
+          }__${u}_${ace_type}_${perm}_type">${grouped_perms[ace_type][perm].inherited
             ? "Parent Object"
             : "(not inherited)"
-        }</td>
+          }</td>
                 </tr>`);
       }
     }
