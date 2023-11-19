@@ -46,10 +46,7 @@ advanced_expl_div = $(
 // Make the div with the explanation about special permissions/advanced settings:
 update_expl_div = $(
   '<div id="permdialog_update_permission_explantion_text">' +
-  "Note that when you change permissions through the checkboxes, " +
-  "the effect does not immediately show in this panel.<br><br>" +
-  "If you want to see what changed after your edit, click <strong>OK</strong> " +
-  "and reopen <strong>Edit Permissions</strong>.</div><br>"
+  "In case changes you made to permission settings are not reflected real-time in this panel, try to click <strong>OK</strong> and reopen this <strong>Edit Permissions Panel</strong>.</div><br>" 
 );
 
 // Make the (grouped) permission checkboxes table:
