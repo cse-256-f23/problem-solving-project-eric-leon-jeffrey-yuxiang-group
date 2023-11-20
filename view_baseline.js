@@ -10,7 +10,7 @@ perm_dialog = define_new_dialog(
   (title = "Permissions"),
   (options = {
     // The following are standard jquery-ui options. See https://jqueryui.com/dialog/
-    height: 650,
+    height: 600,
     width: 900,
     buttons: {
       OK: {
@@ -21,7 +21,7 @@ perm_dialog = define_new_dialog(
         },
       },
       Advanced: {
-        text: "Advanced",
+        text: "Advanced Permission Settings",
         id: "perm-dialog-advanced-button",
         click: function () {
           open_advanced_dialog(perm_dialog.attr("filepath"));
@@ -38,15 +38,15 @@ obj_name_div = $(
 );
 
 // Make the div with the explanation about special permissions/advanced settings:
-advanced_expl_div = $(
-  '<div id="permdialog_advanced_explantion_text"><br>For special permissions or detailed settings, click <strong>Advanced</strong>.</div>'
-);
+// advanced_expl_div = $(
+//   '<div id="permdialog_advanced_explantion_text"><br>For special permissions or detailed settings, click <strong>Advanced</strong>.</div>'
+// );
 // let new_effective_permission_panel = define_new_effective_permissions("effective_permission_panel", true, null);
 
 // Make the div with the explanation about special permissions/advanced settings:
 update_expl_div = $(
   '<div id="permdialog_update_permission_explantion_text">' +
-  "In case changes you made to permission settings are not reflected real-time in this panel, try to click <strong>OK</strong> and reopen this <strong>Edit Permissions Panel</strong>.</div><br>" 
+    "In case changes you made to permission settings are not reflected real-time in this panel, try to click <strong>OK</strong> and reopen this <strong>Edit Permissions</strong> Panel.</div><br>"
 );
 
 // Make the (grouped) permission checkboxes table:
@@ -60,19 +60,28 @@ grouped_permissions.on("click", function () {
   console.log("clicked on permission checkbox");
   console.log("click tracker: " + clickTracker);
   $("#permdialog_effective_permission_panel").attr("filepath", currentFilePath);
-  $("#permdialog_effective_permission_panel").attr("username", selectedUsername);
+  $("#permdialog_effective_permission_panel").attr(
+    "username",
+    selectedUsername
+  );
 
   // Start an interval that runs every 100 ms
-  let intervalId = setInterval(function() {
+  let intervalId = setInterval(function () {
     console.log("click tracker: " + clickTracker);
-    $("#permdialog_effective_permission_panel").attr("filepath", currentFilePath);
-    $("#permdialog_effective_permission_panel").attr("username", selectedUsername);
+    $("#permdialog_effective_permission_panel").attr(
+      "filepath",
+      currentFilePath
+    );
+    $("#permdialog_effective_permission_panel").attr(
+      "username",
+      selectedUsername
+    );
   }, 100);
 
   // Stop the interval after 1 second (1000 ms)
-  setTimeout(function() {
+  setTimeout(function () {
     clearInterval(intervalId);
-    clickTracker = false; 
+    clickTracker = false;
   }, 1000);
 });
 
@@ -84,7 +93,10 @@ file_permission_users = define_single_select_list(
   function (selected_user, e, ui) {
     // Update the selected user
     selectedUsername = selected_user; // Update the local variable
-    $("#permdialog_effective_permission_panel").attr("username", selectedUsername);
+    $("#permdialog_effective_permission_panel").attr(
+      "username",
+      selectedUsername
+    );
     console.log("selected user: " + selected_user);
     // when a new user is selected, change username attribute of grouped permissions:
     grouped_permissions.attr("username", selectedUsername);
@@ -223,10 +235,10 @@ let flexContainer = $("<div/>", {
   id: "perm_flex_container",
   style: "display: flex; width: 100%; height:70px;",
 });
-let advancedDialogButton = $('<button/>', {
+let advancedDialogButton = $("<button/>", {
   id: "open-advanced-dialog-button",
   text: "Advanced Permission Settings",
-  class: "ui-button ui-widget ui-corner-all"
+  class: "ui-button ui-widget ui-corner-all",
 }).click(function () {
   open_advanced_dialog(perm_dialog.attr("filepath"));
 });
@@ -257,22 +269,26 @@ leftColumn.append(
     '<div id="permissions_user_tips">Click on a <strong>name</strong> to see their permissions.</div>'
   )
 );
-leftColumn.append($(
-  '<div id="permissions_user_tips">Use the <strong>Add User</strong> to add a user if they are not in this list.</div>'
-));
+leftColumn.append(
+  $(
+    '<div id="permissions_user_tips">Use the <strong>Add User</strong> to add a user if they are not in this list.</div>'
+  )
+);
 leftColumn.append(perm_add_user_select);
 perm_add_user_select.append(perm_remove_user_button);
 leftColumn.append(grouped_permissions);
-leftColumn.append($('<p/>', {
-  html: '<p class="inheritable-hint">If a checkbox is unclickable, go to <strong>Advanced</strong>, uncheck <strong>Inhertiable Permission</strong>, and choose <strong style="color: #4caf50;">Convert</strong></p>',
-}));
+leftColumn.append(
+  $("<p/>", {
+    html:
+      '<p class="inheritable-hint">If a checkbox is unclickable, go to <strong>Advanced</strong>, uncheck <strong>Inhertiable Permission</strong>, and choose <strong style="color: #4caf50;">Convert</strong></p>',
+  })
+);
 leftColumn.append(advancedDialogButton);
-leftColumn.append(advanced_expl_div);
+// leftColumn.append(advanced_expl_div);
 
 // Append the left column and the effective permissions panel (right column) to the flex container:
 flexContainer.append(leftColumn);
 flexContainer.append(rightColumn);
-
 
 perm_dialog.on("dialogclose", function (event, ui) {
   // Clear the username and filepath attributes
@@ -332,7 +348,8 @@ function make_all_users_list(id_prefix, attr_set_id, height = 80) {
     let user = all_users[username];
     all_user_list.append(
       `<div class="ui-widget-content" id="${id_prefix}_${username}" username="${username}">
-                <span id="${id_prefix}_${username}_icon" class="oi ${is_user(user) ? "oi-person" : "oi-people"
+                <span id="${id_prefix}_${username}_icon" class="oi ${
+        is_user(user) ? "oi-person" : "oi-people"
       }"/> 
                 ${username}
             </div>`
@@ -405,19 +422,25 @@ function open_advanced_dialog(file_path) {
     let grouped_perms = get_grouped_permissions(file_obj, u);
     for (let ace_type in grouped_perms) {
       for (let perm in grouped_perms[ace_type]) {
-        $("#adv_perm_table").append(`<tr id="adv_perm_${file_obj.filename
-          }__${u}_${ace_type}_${perm}">
-                    <td id="adv_perm_${file_obj.filename
-          }__${u}_${ace_type}_${perm}_type">${ace_type}</td>
-                    <td id="adv_perm_${file_obj.filename
-          }__${u}_${ace_type}_${perm}_name">${u}</td>
-                    <td id="adv_perm_${file_obj.filename
-          }__${u}_${ace_type}_${perm}_permission">${perm}</td>
-                    <td id="adv_perm_${file_obj.filename
-          }__${u}_${ace_type}_${perm}_type">${grouped_perms[ace_type][perm].inherited
+        $("#adv_perm_table").append(`<tr id="adv_perm_${
+          file_obj.filename
+        }__${u}_${ace_type}_${perm}">
+                    <td id="adv_perm_${
+                      file_obj.filename
+                    }__${u}_${ace_type}_${perm}_type">${ace_type}</td>
+                    <td id="adv_perm_${
+                      file_obj.filename
+                    }__${u}_${ace_type}_${perm}_name">${u}</td>
+                    <td id="adv_perm_${
+                      file_obj.filename
+                    }__${u}_${ace_type}_${perm}_permission">${perm}</td>
+                    <td id="adv_perm_${
+                      file_obj.filename
+                    }__${u}_${ace_type}_${perm}_type">${
+          grouped_perms[ace_type][perm].inherited
             ? "Parent Object"
             : "(not inherited)"
-          }</td>
+        }</td>
                 </tr>`);
       }
     }
