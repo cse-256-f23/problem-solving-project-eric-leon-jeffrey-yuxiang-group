@@ -230,10 +230,14 @@ let currentFilePath = "";
 
 let permdialog_effective_permission_panel;
 
+let denyAllPermissionsContainer = $('<div/>', {
+  id: "deny-all-permissions-container",
+  class: "deny-all-permissions-wrapper"
+});
 let denyAllPermissionsButton = $('<button/>', {
   id: "deny-all-permissions-button",
-  text: "Deny All Permissions",
-  class: "ui-button ui-widget ui-corner-all"
+  text: "Deny All",
+  class: "ui-button ui-widget ui-corner-all denyAllPermButton"
 }).click(function() {
   let filepath = perm_dialog.attr("filepath");
   let username = selectedUsername;
@@ -251,6 +255,27 @@ let denyAllPermissionsButton = $('<button/>', {
       console.error("Invalid file path or username");
   }
 });
+let allowAllPermissionsButton = $('<button/>', {
+  id: "deny-all-permissions-button",
+  text: "Allow All",
+  class: "ui-button ui-widget ui-corner-all denyAllPermButton"
+}).click(function() {
+  let filepath = perm_dialog.attr("filepath");
+  let username = selectedUsername;
+  console.log("filepath: " + filepath);
+  console.log("username: " + username);
+  if (filepath && username && filepath in path_to_file && username in all_users) {
+      let file = path_to_file[filepath];
+      let permissionsToDeny = Object.values(permissions);
+      // Deny all permissions for the selected user on the selected file
+      add_permissons(file, username, permissionsToDeny, true);
+
+      // Refresh the grouped_permissions element
+      refreshGroupedPermissions(filepath, username);
+  } else {
+      console.error("Invalid file path or username");
+  }
+});
 
 function refreshGroupedPermissions(filepath, username) {
   grouped_permissions.attr('filepath', filepath);
@@ -258,6 +283,35 @@ function refreshGroupedPermissions(filepath, username) {
 }
 
 denyAllPermissionsButton.on("click", function () {
+  clickTracker = true;
+  console.log("clicked on permission checkbox");
+  console.log("click tracker: " + clickTracker);
+  $("#permdialog_effective_permission_panel").attr("filepath", currentFilePath);
+  $("#permdialog_effective_permission_panel").attr(
+    "username",
+    selectedUsername
+  );
+
+  // Start an interval that runs every 100 ms
+  let intervalId = setInterval(function () {
+    console.log("click tracker: " + clickTracker);
+    $("#permdialog_effective_permission_panel").attr(
+      "filepath",
+      currentFilePath
+    );
+    $("#permdialog_effective_permission_panel").attr(
+      "username",
+      selectedUsername
+    );
+  }, 100);
+
+  // Stop the interval after 1 second (1000 ms)
+  setTimeout(function () {
+    clearInterval(intervalId);
+    clickTracker = false;
+  }, 1000);
+});
+allowAllPermissionsButton.on("click", function () {
   clickTracker = true;
   console.log("clicked on permission checkbox");
   console.log("click tracker: " + clickTracker);
@@ -334,7 +388,9 @@ leftColumn.append(
 );
 leftColumn.append(perm_add_user_select);
 perm_add_user_select.append(perm_remove_user_button);
-leftColumn.append(denyAllPermissionsButton);
+leftColumn.append(denyAllPermissionsContainer);
+denyAllPermissionsContainer.append(allowAllPermissionsButton);
+denyAllPermissionsContainer.append(denyAllPermissionsButton);
 leftColumn.append(grouped_permissions);
 leftColumn.append(
   $("<p/>", {

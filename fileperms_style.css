@@ -4,7 +4,7 @@
 }
 
 .section {
-  margin-bottom: 5px;
+  margin-bottom: 0px;
 }
 
 .ui-selected {
@@ -158,4 +158,12 @@
 }
 .inheritable-hint{
   margin: 15px 0;
+}
+.denyAllPermButton{
+  margin: 15px 0;
+}
+.deny-all-permissions-wrapper{
+  display: flex;
+  justify-content: flex-end;
+  column-gap: 5px;
 }
