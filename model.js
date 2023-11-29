@@ -200,6 +200,7 @@ function emitState(purpose = "Permission state changed"){
 
 // add each permission in "permissions" (all of is_allow type) for the given file and user
 function add_permissons(file, user, permissions, is_allow) {
+  console.log('adding permissions', file, user, permissions, is_allow)
   for(p of permissions) {
     file.acl.push(make_ace(user, p, is_allow))
   }

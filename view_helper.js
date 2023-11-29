@@ -464,7 +464,6 @@ function define_file_permission_groups_list(id_prefix){
     return perm_list
 }
 
-
 // -- a general-purpose User Select dialog which can be opened when we need to select a user. -- 
 
 // Make a selectable list which will store all of the users, and automatically keep track of which one is selected.
