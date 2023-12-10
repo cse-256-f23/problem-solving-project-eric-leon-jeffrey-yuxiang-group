@@ -161,9 +161,25 @@
 }
 .denyAllPermButton{
   margin: 15px 0;
+  margin-top: 5px;
 }
 .deny-all-permissions-wrapper{
   display: flex;
   justify-content: flex-end;
   column-gap: 5px;
+}
+
+#permdialog_objname{
+  font-weight: bold;
+  font-size: 18px;
+  margin-bottom: 5px;
+}
+#permdialog_objname_namespan{
+  font-weight: bold;
+  font-size: 18px;
+  color: #1e71ff;
+}
+
+#permdialog_file_user_list{
+  height: 80px !important;
 }

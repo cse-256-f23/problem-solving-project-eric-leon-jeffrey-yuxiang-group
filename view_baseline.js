@@ -388,10 +388,10 @@ leftColumn.append(
 );
 leftColumn.append(perm_add_user_select);
 perm_add_user_select.append(perm_remove_user_button);
+leftColumn.append(grouped_permissions);
 leftColumn.append(denyAllPermissionsContainer);
 denyAllPermissionsContainer.append(allowAllPermissionsButton);
 denyAllPermissionsContainer.append(denyAllPermissionsButton);
-leftColumn.append(grouped_permissions);
 leftColumn.append(
   $("<p/>", {
     html:
