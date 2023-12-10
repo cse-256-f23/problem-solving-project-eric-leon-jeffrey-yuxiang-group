@@ -10,7 +10,7 @@ perm_dialog = define_new_dialog(
   (title = "Permissions"),
   (options = {
     // The following are standard jquery-ui options. See https://jqueryui.com/dialog/
-    height: 600,
+    height: 500,
     width: 900,
     buttons: {
       OK: {
@@ -46,7 +46,7 @@ obj_name_div = $(
 // Make the div with the explanation about special permissions/advanced settings:
 update_expl_div = $(
   '<div id="permdialog_update_permission_explantion_text">' +
-  "In case changes you made to permission settings are not reflected real-time in this panel, try to click <strong>OK</strong> and reopen this <strong>Edit Permissions</strong> Panel.</div><br>"
+    "In case changes you made to permission settings are not reflected real-time in this panel, try to click <strong>OK</strong> and reopen this <strong>Edit Permissions</strong> Panel.</div><br>"
 );
 
 // Make the (grouped) permission checkboxes table:
@@ -230,56 +230,66 @@ let currentFilePath = "";
 
 let permdialog_effective_permission_panel;
 
-let denyAllPermissionsContainer = $('<div/>', {
+let denyAllPermissionsContainer = $("<div/>", {
   id: "deny-all-permissions-container",
-  class: "deny-all-permissions-wrapper"
+  class: "deny-all-permissions-wrapper",
 });
-let denyAllPermissionsButton = $('<button/>', {
+let denyAllPermissionsButton = $("<button/>", {
   id: "deny-all-permissions-button",
   text: "Deny All",
-  class: "ui-button ui-widget ui-corner-all denyAllPermButton"
-}).click(function() {
+  class: "ui-button ui-widget ui-corner-all denyAllPermButton",
+}).click(function () {
   let filepath = perm_dialog.attr("filepath");
   let username = selectedUsername;
   console.log("filepath: " + filepath);
   console.log("username: " + username);
-  if (filepath && username && filepath in path_to_file && username in all_users) {
-      let file = path_to_file[filepath];
-      let permissionsToDeny = Object.values(permissions);
-      // Deny all permissions for the selected user on the selected file
-      add_permissons(file, username, permissionsToDeny, false);
+  if (
+    filepath &&
+    username &&
+    filepath in path_to_file &&
+    username in all_users
+  ) {
+    let file = path_to_file[filepath];
+    let permissionsToDeny = Object.values(permissions);
+    // Deny all permissions for the selected user on the selected file
+    add_permissons(file, username, permissionsToDeny, false);
 
-      // Refresh the grouped_permissions element
-      refreshGroupedPermissions(filepath, username);
+    // Refresh the grouped_permissions element
+    refreshGroupedPermissions(filepath, username);
   } else {
-      console.error("Invalid file path or username");
+    console.error("Invalid file path or username");
   }
 });
-let allowAllPermissionsButton = $('<button/>', {
+let allowAllPermissionsButton = $("<button/>", {
   id: "deny-all-permissions-button",
   text: "Allow All",
-  class: "ui-button ui-widget ui-corner-all denyAllPermButton"
-}).click(function() {
+  class: "ui-button ui-widget ui-corner-all denyAllPermButton",
+}).click(function () {
   let filepath = perm_dialog.attr("filepath");
   let username = selectedUsername;
   console.log("filepath: " + filepath);
   console.log("username: " + username);
-  if (filepath && username && filepath in path_to_file && username in all_users) {
-      let file = path_to_file[filepath];
-      let permissionsToDeny = Object.values(permissions);
-      // Deny all permissions for the selected user on the selected file
-      add_permissons(file, username, permissionsToDeny, true);
+  if (
+    filepath &&
+    username &&
+    filepath in path_to_file &&
+    username in all_users
+  ) {
+    let file = path_to_file[filepath];
+    let permissionsToDeny = Object.values(permissions);
+    // Deny all permissions for the selected user on the selected file
+    add_permissons(file, username, permissionsToDeny, true);
 
-      // Refresh the grouped_permissions element
-      refreshGroupedPermissions(filepath, username);
+    // Refresh the grouped_permissions element
+    refreshGroupedPermissions(filepath, username);
   } else {
-      console.error("Invalid file path or username");
+    console.error("Invalid file path or username");
   }
 });
 
 function refreshGroupedPermissions(filepath, username) {
-  grouped_permissions.attr('filepath', filepath);
-  grouped_permissions.attr('username', username);
+  grouped_permissions.attr("filepath", filepath);
+  grouped_permissions.attr("username", username);
 }
 
 denyAllPermissionsButton.on("click", function () {
@@ -395,10 +405,10 @@ leftColumn.append(grouped_permissions);
 leftColumn.append(
   $("<p/>", {
     html:
-      '<p class="inheritable-hint">If a checkbox is unclickable, go to <strong>Advanced</strong>, uncheck <strong>Inhertiable Permission</strong>, and choose <strong style="color: #4caf50;">Convert</strong></p>',
+      '<p class="inheritable-hint">If a checkbox is unclickable, go to <strong>Advanced Permission Settings</strong>, uncheck <strong>Inhertiable Permission</strong>, and choose <strong style="color: #4caf50;">Convert</strong></p>',
   })
 );
-leftColumn.append(advancedDialogButton);
+// leftColumn.append(advancedDialogButton);
 // leftColumn.append(advanced_expl_div);
 
 // Append the left column and the effective permissions panel (right column) to the flex container:
@@ -463,7 +473,8 @@ function make_all_users_list(id_prefix, attr_set_id, height = 80) {
     let user = all_users[username];
     all_user_list.append(
       `<div class="ui-widget-content" id="${id_prefix}_${username}" username="${username}">
-                <span id="${id_prefix}_${username}_icon" class="oi ${is_user(user) ? "oi-person" : "oi-people"
+                <span id="${id_prefix}_${username}_icon" class="oi ${
+        is_user(user) ? "oi-person" : "oi-people"
       }"/> 
                 ${username}
             </div>`
@@ -536,19 +547,25 @@ function open_advanced_dialog(file_path) {
     let grouped_perms = get_grouped_permissions(file_obj, u);
     for (let ace_type in grouped_perms) {
       for (let perm in grouped_perms[ace_type]) {
-        $("#adv_perm_table").append(`<tr id="adv_perm_${file_obj.filename
-          }__${u}_${ace_type}_${perm}">
-                    <td id="adv_perm_${file_obj.filename
-          }__${u}_${ace_type}_${perm}_type">${ace_type}</td>
-                    <td id="adv_perm_${file_obj.filename
-          }__${u}_${ace_type}_${perm}_name">${u}</td>
-                    <td id="adv_perm_${file_obj.filename
-          }__${u}_${ace_type}_${perm}_permission">${perm}</td>
-                    <td id="adv_perm_${file_obj.filename
-          }__${u}_${ace_type}_${perm}_type">${grouped_perms[ace_type][perm].inherited
+        $("#adv_perm_table").append(`<tr id="adv_perm_${
+          file_obj.filename
+        }__${u}_${ace_type}_${perm}">
+                    <td id="adv_perm_${
+                      file_obj.filename
+                    }__${u}_${ace_type}_${perm}_type">${ace_type}</td>
+                    <td id="adv_perm_${
+                      file_obj.filename
+                    }__${u}_${ace_type}_${perm}_name">${u}</td>
+                    <td id="adv_perm_${
+                      file_obj.filename
+                    }__${u}_${ace_type}_${perm}_permission">${perm}</td>
+                    <td id="adv_perm_${
+                      file_obj.filename
+                    }__${u}_${ace_type}_${perm}_type">${
+          grouped_perms[ace_type][perm].inherited
             ? "Parent Object"
             : "(not inherited)"
-          }</td>
+        }</td>
                 </tr>`);
       }
     }

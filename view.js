@@ -96,14 +96,14 @@ $(".permbutton").click(function (e) {
 
 // make the div with the important notes about the interface:
 important_note_div = $(
-  '<div id="importent-note"><h1>Important Notes</h1><div>'
+  '<div id="importent-note"><h1>This interface uses a permission inheritance system:</h1><h2 style="margin-top: 10px">The permission of someone can be set directly or inheritated from a parent object (or both).</h2><div>'
 );
 
 // array for all the notes
 var notes = [
-  '<strong>Direct</strong> permissions take precedence over <strong>inherited</strong> permissions (if any), and inherited permissions at a "closer" level to the file in question take precedence over ones that are "further" (e.g. parent permissions take precedence over grandparent permissions)',
+  "<strong>Direct</strong> permissions take precedence over <strong>inherited</strong> permissions (if any), and parent permissions take precedence over grandparent permissions.",
   'Within the same inheritance level, <strong>"deny"</strong> permissions take precedence over <strong>"allow"</strong> permissions.',
-  "Within the same inheritance level, permissions set for <strong>users</strong> and <strong>groups</strong> have the same priority; neither takes priority over the other.",
+  "Allowed to <strong>modify</strong> means someone can make changes to a file, including create, write, and delete.",
 ];
 
 // iterate over each line of text and append it to the important-note div
